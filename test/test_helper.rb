@@ -1,4 +1,4 @@
-﻿# 注意这里必须在 require rails/test_help 之前加入，否则不会生效
+# 注意这里必须在 require rails/test_help 之前加入，否则不会生效
 require 'simplecov'
 SimpleCov.start 'rails'
 

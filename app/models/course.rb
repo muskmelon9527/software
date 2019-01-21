@@ -1,7 +1,7 @@
 class Course < ActiveRecord::Base
 
   has_many :grades
-  has_many :users, through: :grades
+  has_many :users, through: :grades 
 
   belongs_to :teacher, class_name: "User"
 

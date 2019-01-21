@@ -1,4 +1,4 @@
-require 'set'
+﻿require 'set'
 
 module CoursesHelper
   def week_data_to_num(week_data)
@@ -9,7 +9,7 @@ module CoursesHelper
         '周四' => 3,
         '周五' => 4,
         '周六' => 5,
-        '周天' => 6,
+        '周日' => 6,
     }
     param[week_data] + 1
   end

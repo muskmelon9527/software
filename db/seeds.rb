@@ -178,7 +178,7 @@ end
       password_confirmation: "password",
   )
 
-  course_array=(1..10).to_a.sort { rand() - 0.5 }[1..rand(4..8)]
+  course_array=(1..34).to_a.sort { rand() - 0.5 }[1..rand(4..8)]
   course_array.each do |index|
     student.courses<<Course.find(index)
     stu_num=Course.find(index).student_num+1

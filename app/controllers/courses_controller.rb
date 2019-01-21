@@ -1,5 +1,5 @@
 class CoursesController < ApplicationController
-
+  include CoursesHelper
   before_action :student_logged_in, only: [:select, :quit, :list]
   before_action :teacher_logged_in, only: [:new, :create, :edit, :destroy, :update, :open, :close]#add open by qiao
   before_action :logged_in, only: :index
@@ -59,27 +59,113 @@ class CoursesController < ApplicationController
 
   def list
     #-------QiaoCode--------
-    @courses = Course.where(:open=>true).paginate(page: params[:page], per_page: 4)
-    @course = @courses-current_user.courses
-    tmp=[]
-    @course.each do |course|
-      if course.open==true
-        tmp<<course
+    @isopen = isopen?()
+    if @isopen
+      @course=Course.where(:open=>true)
+      @course=@course-current_user.courses
+      @course_time_table = get_course_table(@course)
+      tmp=[]
+      @course.each do |course|
+        if course.open==true
+          tmp<<course
+        end
       end
+      @course=tmp
     end
-    @course=tmp
   end
 
   def select
+    @isopen = isopen?()
+    if @isopen
+    @flag=0
     @course=Course.find_by_id(params[:id])
-    current_user.courses<<@course
-    flash={:suceess => "成功选择课程: #{@course.name}"}
-    redirect_to courses_path, flash: flash
+    if !@course.limit_num.nil? 
+      if @course.limit_num<=@course.student_num
+        @flag=2
+      end
+    end
+    @course_time_now=@course.course_time
+    @course_week_now=@course.course_week
+    if @course_week_now[2]=="-"
+      @now_first_week=@course_week_now[1,1].to_i
+    else
+      @now_first_week=@course_week_now[1,2].to_i
+    end
+    if @course_week_now[-4]=="-"
+      @now_last_week=@course_week_now[-3,1].to_i
+    else
+      @now_last_week=@course_week_now[-4,2].to_i
+    end
+    @now_weekday=@course_time_now[1,1]
+    if @course_time_now[4]=="-"
+      @now_first_time=@course_time_now[3,1].to_i
+    else
+      @now_first_time=@course_time_now[3,2].to_i
+    end
+    if @course_time_now[-3]=="-"
+      @now_last_time=@course_time_now[-2,1].to_i
+    else
+      @now_last_time=@course_time_now[-3,2].to_i
+    end
+    @current_user_course=current_user.courses
+    @tmp_course=@course
+    @current_user_course.each do |course|    
+      @course_week_user=course.course_week
+      if @course_week_user[2]=="-"
+        @user_first_week=@course_week_user[1,1].to_i
+      else
+        @user_first_week=@course_week_user[1,2].to_i
+      end
+      if @course_week_user[-4]=="-"
+        @user_last_week=@course_week_user[-3,1].to_i
+      else
+        @user_last_week=@course_week_user[-4,2].to_i
+      end
+      @course_time_user=course.course_time
+      @user_weekday=@course_time_user[1,1]
+      if @user_first_week>@now_last_week or @user_last_week<@now_first_week or @user_weekday!=@now_weekday
+         
+      else
+        if @course_time_user[4]=="-"
+          @user_first_time=@course_time_user[3,1].to_i
+        else
+          @user_first_time=@course_time_user[3,2].to_i
+        end
+        if @course_time_user[-3]=="-"
+          @user_last_time=@course_time_user[-2,1].to_i
+        else
+          @user_last_time=@course_time_user[-3,2].to_i
+        end
+        if @user_last_time<@now_first_time or @user_first_time>@now_last_time
+           
+        else
+          @flag=1
+          @tmp_course=course
+          break
+        end
+      end
+    end
+    if @flag==0
+      stu_num=@course.student_num+1
+      @course.update_attributes(student_num:stu_num)
+      current_user.courses<<@course
+      flash={:suceess => "成功选择课程: #{@course.name}"}
+      redirect_to courses_path, flash: flash
+    elsif @flag==1
+      flash={:fail =>"选课失败！ #{@course.name} 与 #{@tmp_course.name} 上课时间冲突！"}
+      redirect_to courses_path, flash: flash
+    else
+      flash={:fail =>"选课失败！选课人数已达到上限！"}
+      redirect_to courses_path, flash: flash
+    end
+  end
   end
 
   def quit
     @course=Course.find_by_id(params[:id])
     current_user.courses.delete(@course)
+    stu_num=@course.student_num-1
+    @course.update_attributes(student_num:stu_num)
     flash={:success => "成功退选课程: #{@course.name}"}
     redirect_to courses_path, flash: flash
   end
@@ -88,8 +174,10 @@ class CoursesController < ApplicationController
   #-------------------------for both teachers and students----------------------
 
   def index
-    @course=current_user.teaching_courses.paginate(page: params[:page], per_page: 4) if teacher_logged_in?
-    @course=current_user.courses.paginate(page: params[:page], per_page: 4) if student_logged_in?
+    @isopen = isopen?()
+    @course=current_user.teaching_courses if teacher_logged_in?
+    @course=current_user.courses if student_logged_in?
+    @course_time_table = get_course_table(@course)
   end
 
 

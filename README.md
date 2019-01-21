@@ -1,30 +1,33 @@
-﻿# CourseSelect [![Build Status](https://travis-ci.org/PENGZhaoqing/CourseSelect.svg?branch=master)](https://travis-ci.org/PENGZhaoqing/CourseSelect)
 
-### [中文教程1](http://blog.csdn.net/ppp8300885/article/details/52594839) [中文教程2](http://blog.csdn.net/ppp8300885/article/details/52601560) [中文教程3](http://blog.csdn.net/ppp8300885/article/details/52669749) [Wiki](https://github.com/PENGZhaoqing/CourseSelect/wiki)
+# 国科大教务在线 [![Build Status](https://travis-ci.org/PENGZhaoqing/CourseSelect.svg?branch=master)](https://travis-ci.org/PENGZhaoqing/CourseSelect)
 
 
-这个样本系统是基于国科大研究生课程 (高级软件工程) 开发的项目,目的是帮助入门者学习RoR (Ruby on Rails),
+这个样本系统是基于国科大研究生课程 (高级软件工程) 开发的项目，作为该课程的期末课程设计作业
 
-适合新学者的入手的第一个项目 ([演示Demo戳这里](https://courseselect.herokuapp.com/ ))，入门者可以在这个样本系统上增加更多的功能:
+本次的课程设计已经部署在了Heroku云平台 ([演示Demo戳这里](https://couseselect.herokuapp.com/ ))
 
-* 处理选课冲突、控制选课人数
-* 统计选课学分，学位课等
-* 增加选课的开放、关闭功能
-* 自定义管理员后台
-* 基于OAuth的授权登陆
-* Excel格式的数据导入
-* 绑定用户邮箱（实现注册激活，忘记密码等）
-* 站内查找检索 （课程按分类查找，过滤等）
+### 在进行优化之前，系统的功能包括：
 
-### 目前功能：
+- 查询成绩
+- 选课退课
+- 课程管理
+- 用户管理
+- 开课管理
+- 添加成绩
+- 多角色登陆（学生，老师，管理员）
 
-* 多角色登陆（学生，老师，管理员）
-* 学生动态选课，退课
-* 老师动态增加，删除课程
-* 老师对课程下的学生添加、修改成绩
-* 权限控制：老师和学生只能看到自己相关课程信息
+### 修改完成后包含的功能：
 
-**如果觉得好，给项目点颗星吧～**
+* 管理员发布通知
+* 管理员发布校园活动
+* 管理员开放/关闭选课系统
+* 管理员系统界面的汉化
+* 教师对选课学生成绩单导入导出
+* 教师开启/关闭选课按钮
+* 学生查看课表
+* 学生修改是/否学位课属性
+* 学生显示修读课程成绩排名
+* 学生查看成绩UI设计美化
 
 ### 截图
 
@@ -64,6 +67,18 @@ $ rails s
 
 在浏览器中输入`localhost:3000`访问主页
 
+
+## 将开发的选课系统部署到Heroku平台
+```
+ heroku login
+ heroku cerate couseselect
+ git commit -a -m '-version'
+ git push heroku master
+ heroku run rake db:migrate
+ heroku run rake db:seed
+
+```
+输入https://couseselect.herokuapp.com/ 可以访问系统
 ## 使用
 
 1.学生登陆：
@@ -87,148 +102,330 @@ $ rails s
 
 账号中数字都可以替换成2,3...等等
 
+## 功能测试及展示
 
-## Heroku云部署
+### 管理员功能
 
-项目可直接在Heroku上免费部署
+- 发布通知以及校园活动公告
 
-1.fork此项目到自己Github账号下
+  <img src="/lib/admin_notice_1.png" width="700">
 
-2.创建Heroku账号以及Heroku app
+  <img src="/lib/admin_notice_2.png" width="700">
 
-3.将Heroku app与自己Github下的fork的项目进行连接
+- 关闭选课系统
 
-4.下载配置[Heroku CLI](https://devcenter.heroku.com/articles/heroku-command-line)命令行工具
+  <img src="/lib/admin_close_1.png" width="700">
 
-5.运行`heroku login`在终端登陆，检查与heroku app的远程连接情况`git config --list | grep heroku`，若未检查到相应的app，请看[这里](http://stackoverflow.com/questions/5129598/how-to-link-a-folder-with-an-existing-heroku-app)
+  <img src="/lib/admin_close_2.png" width="700">
 
-6.运行部署，详情[请戳这里](https://devcenter.heroku.com/articles/getting-started-with-rails4#rails-asset-pipeline)
+- 设置选课人数限制
 
+  <img src="/lib/admin_limit_1.png" width="700">
 
-## 本地测试
+  <img src="/lib/admin_limit_3.png" width="700">
 
-本项目包含了部分的测试（integration/fixture/model test），测试文件位于/test目录下。一键运行所有测试使用`rake test`：
+  <img src="/lib/admin_limit_2.png" width="700">
 
-```
-PENG-MacBook-Pro:IMS_sample PENG-mac$ rake test
-Run options: --seed 15794
+- 管理员用户界面汉化
 
-# Running:
-.........
-
-Finished in 1.202169s, 7.4865 runs/s, 16.6366 assertions/s.
-
-9 runs, 20 assertions, 0 failures, 0 errors, 0 skips
-```
-
-### 模型测试
-
-以用户模型为例, 位于`test/models/user_test.rb`, 首先生成一个`@user`对象，然后`assert`用户是否有效，这里的调用`valid`方法会去检查你的模型中的相关的`validates`语句是否正确，若`@user.valid?`为false, 那么此`assert`会报错，代表`"should be valid"`这条测试没有通过, 单独运行此测试文件使用`rake test test/models/user_test.rb`
+  <img src="/lib/admin_translate.png" width="700">
 
 
-```
-class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+### 教师功能
 
-  def setup
-    @user = User.new(name: "Example User", email: "user@example.com", password: "password", password_confirmation: "password")
-  end
+- Excel文件数据导入导出
 
-  test "should be valid" do
-    assert  @user.valid?
-  end
+  <img src="/lib/teacher_upload_1.png" width="700">
 
-  ...
+  点击导出后，系统将生成一个Excel文件并提示保存到本地
 
-end
-```
+  <img src="/lib/teacher_upload_2.png" width="700">
 
-### 视图和控制器测试
+  在Excel文件中修改学生选课成绩的数据
 
-以用户登录为例，位于`test/integration/user_login_test.rb`，首先同样生成一个@user模型，这个@user的用户名和密码可以在`test/fixtures/users.yml`中指定, 然后我们用get方法到达登录页面（sessions_login_path），然后使用post方法提交这个@user的账号密码来登录，如果登录成功，当前应该会跳转至homes控制器下的index方法进行处理，`assert_redirected_to`能判断这个跳转过程是否发生，然后调用`follow_redirect！`来紧跟当前的跳转，用`assert_template`来判读跳转后的视图文件是否为`homes/index`, 最后在这个视图文件下做一些测试，比如判断这个视图下连接为root_path的个数等等（根据当前登录的角色不同，当前的页面链接会不同，比如admin用户就会有控制面板的链接rails_admin_path，而普通用户没有，因此可以根据链接的个数来判断当前登录用户的角色）
+  <img src="/lib/teacher_upload_3.png" width="700">
 
-```
-class UserLoginTest < ActionDispatch::IntegrationTest
+  <img src="/lib/teacher_upload_4.png" width="700">
 
-  def setup
-    @user = users(:peng)
-  end
+- 查看通知
 
-  test "login with valid information" do
-    get sessions_login_path
-    post sessions_login_path(params: {session: {email: @user.email, password: 'password'}})
-    assert_redirected_to controller: :homes, action: :index
-    follow_redirect!
-    assert_template 'homes/index'
-    assert_select "a[href=?]", root_path, count: 2
-    assert_select "a[href=?]", rails_admin_path, count: 0
-  end
-end
-```
+  <img src="/lib/teacher_notice.png" width="700">
 
-### 测试涵盖率检测
+### 学生功能
 
-我们可以使用[simplecov](https://github.com/colszowka/simplecov/)库来检测我们编写的测试对于我们的项目是否完整，步骤如下：
+- 查看课程表
 
-1. 在Gemfile文件中导入simplecov库：`gem 'simplecov', :require => false, :group => :test`，然后`bundle install`安装
-2. 在test/test_helper.rb的最前面加入simplecov的启动代码（这里默认使用rails自带的test框架，simplecov也支持其他测试框架如rspec，那么启动代码导入的位置请参考simplecov的官方文档）
+  <img src="/lib/student_schedule.png" width="700">
 
-  ```
-  # 注意这里必须在 require rails/test_help 之前加入，否则不会生效
-  require 'simplecov'
-  SimpleCov.start 'rails'
+  <img src="/lib/student_conflict.png" width="700">
 
-  ENV['RAILS_ENV'] ||= 'test'
-  require File.expand_path('../../config/environment', __FILE__)
-  require 'rails/test_help'
+  <img src="/lib/student_credit.png" width="700">
 
-  class ActiveSupport::TestCase
-    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
+- 设置学位课
 
-    # Add more helper methods to be used by all tests here...
-  end
-  ```
+  <img src="/lib/student_degree_1.png" width="700">
 
-3. 运行`rake test`,成功后会根目录的coverage下生成一个index.html文件，用浏览器打开能看到结果如下：
+  <img src="/lib/student_degree_2.png" width="700">
 
-  <img src="/lib/screenshot5.png" width="700">  
+- 查看修读课程成绩排名
 
-  <img src="/lib/screenshot6.png" width="700">  
+  <img src="/lib/student_rank.png" width="700">
 
 
-## Travis CI 线上自动测试
+## 测试用例
+- 测试1:查看教务通知
 
-上述为本地测试，我们可以使用Travis CI来实现自动测试，首先申请一个Travis CI的账号，然后与自己的github连接起来，接着在自己项目根目录中增加一个新的文件`.travis.yml`如下，这个文件中指定了测试需要的ruby版本，数据库等配置以及一些测试前的脚本操作，当你的github发生更新后，Travis CI会自动触发测试（需要你在Travis CI中自己设置自动/手动触发），然后读取你的`.travis.yml`文件配置进行测试，其实也就是把本地测试拉到服务器上进行，测试成功后会在你的github项目给一个buliding pass的标签（见CourseSelect题目旁边），代表当前的代码是通过测试的
+  > Given 游客身份
+  >
+  > and 未登录
+  >
+  > when 用户点击通知栏的“选课通知”
+  >
+  > then 跳转页面，显示“选课通知”的详细情况
 
-```
-language: ruby
+- 测试2：编辑或添加教务通知
 
-rvm:
-  - 2.2
+  > Given 学生身份登录的student1
+  >
+  > when 学生点击“选课通知”
+  >
+  > then 跳转页面，显示“选课通知”的详细情况，但无“编辑”按钮
+  >
+  >  
+  >
+  >  
+  >
+  > Given 管理员身份登录的admin
+  >
+  > and 处于“选课通知”的详细情况页面
+  >
+  > when 管理员点击编辑按钮
+  >
+  > then 跳转到通知编辑页面，编辑完可选择保存
+  >
+  >  
+  >
+  >  
+  >
+  > Given 管理员身份登录的admin
+  >
+  > and 处于控制面板中教务通知界面
+  >
+  > when 管理员点击添加按钮
+  >
+  > then 跳转到通知编辑页面，保存后生成了新的教务通知
 
-env:
-  - DB=pgsql
+- 测试3：编辑或添加讲座信息
 
-services:
-  - postgresql
+  > Given 学生身份登录的student1
+  >
+  > and 处于选课系统主页
+  >
+  > when 学生点击讲座信息
+  >
+  > then 无反应（学生无法修改讲座信息）
+  >
+  >  
+  >
+  >  
+  >
+  > Given 管理员身份登录的admin
+  >
+  > and 处于控制面板中讲座信息界面
+  >
+  > when 管理员点击添加按钮
+  >
+  > then 跳转到讲座信息编辑页面，保存后生成了新的讲座信息
 
-script:
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec rake db:test:prepare
-  - bundle exec rake
+- 测试4：关闭选课系统
 
-before_script:
-  - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database courseselect_test;' -U postgres
-```
+  > Given 学生身份登录的student1
+  >
+  > and 选课系统处于关闭状态
+  >
+  > and 处于“我的课程”页面
+  >
+  > when 学生点击“选修课程”按钮
+  >
+  > then 弹出通知窗口“当前不在选课时间”
+  >
+  > when 学生点击“已选课程”按钮
+  >
+  > then 显示student1的已选课程，不显示“删除课程”按钮
+  >
+  >  
+  >
+  >  
+  >
+  > Given 管理员身份登录的admin
+  >
+  > and 处于控制面板中选课系统开放界面
+  >
+  > when 管理员点击编辑按钮
+  >
+  > then 跳转到选课系统开放编辑页面，管理员可更改选课系统是否开放并保存
+
+- 测试5：开放选课系统
+
+  > Given 学生身份登录的student1
+  >
+  > and 选课系统处于开放状态
+  >
+  > and 处于“我的课程”页面
+  >
+  > when 学生点击“选修课程”按钮
+  >
+  > then 跳转页面，显示student1可选的所有课程
+  >
+  > when 学生点击“已选课程”按钮
+  >
+  > then 显示student1的已选课程，同时显示“删除课程”按钮
+
+- 测试6：设置课程限选人数
+
+  > Given 管理员身份登录的admin
+  >
+  > and 处于控制面板中课程界面
+  >
+  > when 管理员点击课程“计算机体系结构”后的编辑按钮
+  >
+  > then 跳转到该课程编辑页面，管理员可更改课程限选人数并保存
+  >
+  >  
+  >
+  >  
+  >
+  > Given 老师身份登录的teacher1
+  >
+  > and 处于课程管理页面
+  >
+  > when 老师点击已授课程中“计算机体系结构”后的编辑按钮
+  >
+  > then 跳转到该课程编辑页面，老师可更改该课程限选人数并保存
+  >
+  >  
+  >
+  >  
+  >
+  > Given 学生身份登录的student1
+  >
+  > and 选课系统处于开放状态
+  >
+  > and “计算机体系结构”课程选课人数已达限选人数
+  >
+  > and 处于“选修课程”页面
+  >
+  > when 学生选课“计算机体系结构”
+  >
+  > then 弹出通知窗口“选课失败！选课人数已达上限！”
+
+- 测试7：导入导出学生成绩
+
+  > Given 教师身份登录的teacher1
+  >
+  > and 处于成绩管理界面
+  >
+  > when 教师点击成绩后的“导出”按钮
+  >
+  > then 生成以“计算机体系结构”为名的excel文件，其中包含界面上的所有信息
+  >
+  > when 教师点击“选择文件”按钮：
+  >
+  > then 打开本地文件管理器，可以让教师浏览要上传的成绩文件
+  >
+  > when 教师点击“导入”按钮
+  >
+  > then 根据教师选择的“计算机体系结构”表格文件内的成绩，将成绩显示在成绩管理界面
+
+- 测试8：显示课程表
+
+  > Given 学生身份登录的student1
+  >
+  > and 处于“已选课程”页面
+  >
+  > when 学生点击右侧“<”按钮
+  >
+  > then 以课程表的形式显示student1已选课程的课程名和上课教室
+  >
+  > when 学生再次点击课程表左侧的“>”按钮
+  >
+  > then 隐藏课程表界面
+
+- 测试9：处理选课时间冲突
+
+  > Given 学生身份登录的student1
+  >
+  > and student1已选一门与“模式识别与机器学习”时间冲突的课“编译程序高级原理”
+  >
+  > and 处于“选修课程”页面
+  >
+  > when 学生选择“模式识别与机器学习”这门课
+  >
+  > then 弹出通知窗口“选课失败！模式识别与机器学习 与 编译程序高级原理 上课时间冲突！”并跳转到已选课程界面
+
+- 测试10：显示已选学分
+
+  > Given 学生身份登录的student1
+  >
+  > and student1共选7门课，16学分
+  >
+  > and 处于“我的课程”页面
+  >
+  > when 学生点击已选课程
+  >
+  > then 在课程列表下方展示学生应选学分数20和已选学分数16
+
+- 测试11：显示已获学分
+
+  > Given 学生身份登录的student1
+  >
+  > and student1共选7门课
+  >
+  > and student1已有4门课已出成绩
+  >
+  > and 有3门课成绩不低于60分，共7学分
+  >
+  > and 处于“我的课程”页面
+  >
+  > when 学生点击所有成绩
+  >
+  > then 只显示已获成绩的4门课，并且在成绩列表下方展示学生应或学分数20，和已获学分数7（已获学分只统计成绩不低于60分的课程）
+
+- 测试12：学位课设置
+
+  > Given 学生身份登录的student1
+  >
+  > and 处于学位课页面
+  >
+  > and student1已选“计算机体系结构”课
+  >
+  > and student1将该课程设为非学位课
+  >
+  > when 学生点击该课程后方的设为学位课按钮
+  >
+  > then 修改该课程的学位课属性为“是”，并展示出来，同时将后面按钮修改为“设为非学位课”
+  >
+  >  
+  >
+  >  
+  >
+  > Given 学生身份登录的student1
+  >
+  > and 处于学位课页面
+  >
+  > and student1已选“计算机体系结构”课
+  >
+  > and student1将该课程设为学位课
+  >
+  > when 学生点击该课程后方的设为非学位课按钮
+  >
+  > then 修改该课程的学位课属性为“否”，并展示出来，同时将后面按钮修改为“设为学位课”
+
 
 ## How to Contribute
 
 先fork此项目，在分支修改后，pull request到主分支
 
+提问请到issues里创建，欢迎contributor！
 
-
-
+如果觉得好，给项目点颗星吧～

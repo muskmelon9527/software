@@ -1,3 +1,4 @@
+<% if @isopen %>
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-2">
@@ -28,7 +29,7 @@
             </thead>
             <tbody>
 
-            <% @courses.each do |course| %>
+            <% @course.each do |course| %>
                 <tr>
 
                   <td><%= course.course_code %></td>
@@ -46,11 +47,13 @@
             <% end %>
             </tbody>
           </table>
-          <%= will_paginate @courses %>
         </div>
       </div>
     </div>
   </div>
 </div>
+<% else %>
+  <%= render 'layouts/content', :flash => {:danger => "当前不在选课时间"} %>
+<% end %>
 
 

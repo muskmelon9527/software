@@ -59,9 +59,11 @@ Notice.create!([
 ])
 
 Activity.create!([
-  {user_id: nil, title: "明德讲堂M465：未来生物科技与军队战斗力", class_room: "雁栖湖 教1-107", speaker: "雷二庆", when: "2018-01-11 18:30"},
-  {user_id: nil, title: "明德讲堂M466：黄河绕着黄土转了一个弯", class_room: "雁栖湖 教2-201", speaker: "单之蔷", when: "2018-01-09 18:30"},
-  {user_id: nil, title: "明德讲堂M464：全民媒体时代的新闻发布对策分析", class_room: "雁栖湖 教1-306", speaker: "刘庆生", when: "2018-01-07 18:30"}
+  {user_id: nil, title: "科技前沿M465：有机聚合物太阳能电池关键材料研究", class_room: "雁栖湖 教1-107", speaker: "倪四道", when: "2018-12-11 18:30"},
+  {user_id: nil, title: "科技前沿M464：未来生物科技与军队战斗力", class_room: "雁栖湖 教1-107", speaker: "雷二庆", when: "2018-12-20 18:30"},
+  {user_id: nil, title: "科技前沿M463：集成电路工艺中的新器件——从FinFET到Beyond Moore器件", class_room: "雁栖湖 教1-107", speaker: "殷华湘", when: "2018-11-11 18:30"},
+  {user_id: nil, title: "明德讲堂M466：黄河绕着黄土转了一个弯", class_room: "雁栖湖 教2-201", speaker: "单之蔷", when: "2018-11-09 18:30"},
+  {user_id: nil, title: "明德讲堂M469：全民媒体时代的新闻发布对策分析", class_room: "雁栖湖 教1-306", speaker: "刘庆生", when: "2018-11-07 18:30"}
 ])
 
 Opensystem.create(

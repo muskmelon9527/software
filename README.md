@@ -1,12 +1,7 @@
 ﻿
-# 国科大教务在线 [![Build Status](https://travis-ci.org/PENGZhaoqing/CourseSelect.svg?branch=master)](https://travis-ci.org/PENGZhaoqing/CourseSelect)
-
-
 开发此系统用于国科大研究生同学选课
 
-本次的课程设计已经部署在了Heroku云平台 ([演示Demo戳这里](https://couseselect.herokuapp.com/ ))
-
-### 在进行优化之前，系统的功能包括：
+### 在对系统进行优化之前，其功能包括：
 
 - 查询成绩
 - 选课退课
@@ -29,7 +24,7 @@
 * 学生显示修读课程成绩排名
 * 学生查看成绩UI设计美化
 
-### 截图
+### 界面截图
 
 <img src="/lib/screenshot1.png" width="700">  
 
@@ -49,15 +44,12 @@
 
 使用前需要安装Bundler，Gem，Ruby，Rails等依赖环境。
 
-请根据本地系统下载安装[postgresql](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup)数据库，并运行`psql -h localhost`检查安装情况。
-
-
 ## 安装
 
 在终端（MacOS或Linux）中执行以下代码
 
 ```
-$ git clone https://github.com/PENGZhaoqing/CourseSelect
+$ git clone https://github.com/muskmelon9527/software
 $ cd CourseSelect
 $ bundle install
 $ rake db:migrate
@@ -66,20 +58,6 @@ $ rails s
 ```
 
 在浏览器中输入`localhost:3000`访问主页
-
-
-## 将开发的选课系统部署到Heroku平台
-```
- heroku login
- heroku cerate couseselect
- git commit -a -m '-version'
- git push heroku master
- heroku run rake db:migrate
- heroku run rake db:seed
-
-```
-输入https://couseselect.herokuapp.com/ 可以访问系统
-## 使用
 
 1.学生登陆：
 
@@ -420,12 +398,3 @@ $ rails s
   > when 学生点击该课程后方的设为非学位课按钮
   >
   > then 修改该课程的学位课属性为“否”，并展示出来，同时将后面按钮修改为“设为学位课”
-
-
-## How to Contribute
-
-先fork此项目，在分支修改后，pull request到主分支
-
-提问请到issues里创建，欢迎contributor！
-
-如果觉得好，给项目点颗星吧～

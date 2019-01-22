@@ -18,7 +18,18 @@
 - 学生查看课表
 - 学生修改是/否学位课属性
 - 学生显示修读课程成绩排名
-- 学生查看成绩UI设计美化
+
+### 截图
+
+<img src="/lib/screenshot1.png" width="700">  
+
+<img src="/lib/screenshot2.png" width="700">
+
+<img src="/lib/screenshot3.png" width="700">   
+
+<img src="/lib/screenshot4.png" width="700">
+
+<img src="/lib/screenshot5.png" width="700">
 
 ## 说明
 
@@ -36,15 +47,40 @@
 
 ```
 $ git clone https://github.com/muskmelon9527/software
-$ cd CourseSelect
 $ bundle install
+$ sudo service postgresql start
+$ psql
+ubuntu=# UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';
+ubuntu=# DROP DATABASE template1;
+ubuntu=# CREATE DATABASE template1 WITH TEMPLATE = template0 ENCODING = 'UNICODE';
+ubuntu=# UPDATE pg_database SET datistemplate = TRUE WHERE datname = 'template1';
+ubuntu=# \c template1
+template1=# VACUUM FREEZE;
+template1=# \q
+$ rake db:create:all
 $ rake db:migrate
 $ rake db:seed
-$ rails s 
+$ rails server -p $PORT -b $IP
 ```
 
 在浏览器中输入`localhost:3000`访问主页
 
+
+## 将开发的选课系统部署到Heroku平台
+```
+$ heroku login//输入账号及密码
+$ git init 
+$ git add .
+$ git commit -m “init”
+$ git status 
+$ heroku create
+$ git config --list | grep heroku
+$ git push heroku master 
+
+```
+本次部署出现了错误（precompiling assets failed）,经stack overflow也一直未能找到有效的解决办法。
+
+## 使用
 1.学生登陆：
 
 账号：`student1@test.com`
@@ -72,82 +108,27 @@ $ rails s
 
 - 发布通知以及校园活动公告
 
-  <img src="/lib/admin_notice_1.png" width="700">
-
-  <img src="/lib/admin_notice_2.png" width="700">
-
 - 关闭选课系统
 
-  <img src="/lib/admin_close_1.png" width="700">
-
-  <img src="/lib/admin_close_2.png" width="700">
-
 - 设置选课人数限制
-
-  <img src="/lib/admin_limit_1.png" width="700">
-
-  <img src="/lib/admin_limit_3.png" width="700">
-
-  <img src="/lib/admin_limit_2.png" width="700">
-
-- 管理员用户界面汉化
-
-  <img src="/lib/admin_translate.png" width="700">
-
 
 ### 教师功能
 
 - Excel文件数据导入导出
 
-  <img src="/lib/teacher_upload_1.png" width="700">
-
-  点击导出后，系统将生成一个Excel文件并提示保存到本地
-
-  <img src="/lib/teacher_upload_2.png" width="700">
-
-  在Excel文件中修改学生选课成绩的数据
-
-  <img src="/lib/teacher_upload_3.png" width="700">
-
-  <img src="/lib/teacher_upload_4.png" width="700">
-
 - 查看通知
-
-  <img src="/lib/teacher_notice.png" width="700">
 
 ### 学生功能
 
 - 查看课程表
 
-  <img src="/lib/student_schedule.png" width="700">
-
-  <img src="/lib/student_conflict.png" width="700">
-
-  <img src="/lib/student_credit.png" width="700">
-
 - 设置学位课
-
-  <img src="/lib/student_degree_1.png" width="700">
-
-  <img src="/lib/student_degree_2.png" width="700">
 
 - 查看修读课程成绩排名
 
-  <img src="/lib/student_rank.png" width="700">
-
 
 ## 测试用例
-- 测试1:查看教务通知
-
-  > Given 游客身份
-  >
-  > and 未登录
-  >
-  > when 用户点击通知栏的“选课通知”
-  >
-  > then 跳转页面，显示“选课通知”的详细情况
-
-- 测试2：编辑或添加教务通知
+- 测试1：编辑或添加教务通知
 
   > Given 学生身份登录的student1
   >
@@ -179,7 +160,38 @@ $ rails s
   >
   > then 跳转到通知编辑页面，保存后生成了新的教务通知
 
-- 测试3：编辑或添加讲座信息
+
+
+- 测试2:查看教务通知
+
+  > Given 游客身份
+  >
+  > and 未登录
+  >
+  > when 用户点击通知栏的“选课通知”
+  >
+  > then 跳转页面，显示“选课通知”的详细情况
+
+
+
+
+
+- 测试3：显示课程表
+
+  > Given 学生身份登录的student1
+  >
+  > and 处于“已选课程”页面
+  >
+  > when 学生点击右侧“<”按钮
+  >
+  > then 以课程表的形式显示student1已选课程的课程名和上课教室
+  >
+  > when 学生再次点击课程表左侧的“>”按钮
+  >
+  > then 隐藏课程表界面
+
+
+- 测试4：编辑或添加讲座信息
 
   > Given 学生身份登录的student1
   >
@@ -201,34 +213,6 @@ $ rails s
   >
   > then 跳转到讲座信息编辑页面，保存后生成了新的讲座信息
 
-- 测试4：关闭选课系统
-
-  > Given 学生身份登录的student1
-  >
-  > and 选课系统处于关闭状态
-  >
-  > and 处于“我的课程”页面
-  >
-  > when 学生点击“选修课程”按钮
-  >
-  > then 弹出通知窗口“当前不在选课时间”
-  >
-  > when 学生点击“已选课程”按钮
-  >
-  > then 显示student1的已选课程，不显示“删除课程”按钮
-  >
-  >  
-  >
-  >  
-  >
-  > Given 管理员身份登录的admin
-  >
-  > and 处于控制面板中选课系统开放界面
-  >
-  > when 管理员点击编辑按钮
-  >
-  > then 跳转到选课系统开放编辑页面，管理员可更改选课系统是否开放并保存
-
 - 测试5：开放选课系统
 
   > Given 学生身份登录的student1
@@ -245,7 +229,35 @@ $ rails s
   >
   > then 显示student1的已选课程，同时显示“删除课程”按钮
 
-- 测试6：设置课程限选人数
+- 测试6：处理选课时间冲突
+
+  > Given 学生身份登录的student1
+  >
+  > and student1已选一门与“模式识别与机器学习”时间冲突的课“编译程序高级原理”
+  >
+  > and 处于“选修课程”页面
+  >
+  > when 学生选择“模式识别与机器学习”这门课
+  >
+  > then 弹出通知窗口“选课失败！模式识别与机器学习 与 编译程序高级原理 上课时间冲突！”并跳转到已选课程界面
+
+- 测试7：显示已获学分
+
+  > Given 学生身份登录的student1
+  >
+  > and student1共选7门课
+  >
+  > and student1已有4门课已出成绩
+  >
+  > and 有3门课成绩不低于60分，共7学分
+  >
+  > and 处于“我的课程”页面
+  >
+  > when 学生点击所有成绩
+  >
+  > then 只显示已获成绩的4门课，并且在成绩列表下方展示学生应或学分数20，和已获学分数7（已获学分只统计成绩不低于60分的课程）
+
+- 测试8：设置课程限选人数
 
   > Given 管理员身份登录的admin
   >
@@ -283,104 +295,4 @@ $ rails s
   >
   > then 弹出通知窗口“选课失败！选课人数已达上限！”
 
-- 测试7：导入导出学生成绩
 
-  > Given 教师身份登录的teacher1
-  >
-  > and 处于成绩管理界面
-  >
-  > when 教师点击成绩后的“导出”按钮
-  >
-  > then 生成以“计算机体系结构”为名的excel文件，其中包含界面上的所有信息
-  >
-  > when 教师点击“选择文件”按钮：
-  >
-  > then 打开本地文件管理器，可以让教师浏览要上传的成绩文件
-  >
-  > when 教师点击“导入”按钮
-  >
-  > then 根据教师选择的“计算机体系结构”表格文件内的成绩，将成绩显示在成绩管理界面
-
-- 测试8：显示课程表
-
-  > Given 学生身份登录的student1
-  >
-  > and 处于“已选课程”页面
-  >
-  > when 学生点击右侧“<”按钮
-  >
-  > then 以课程表的形式显示student1已选课程的课程名和上课教室
-  >
-  > when 学生再次点击课程表左侧的“>”按钮
-  >
-  > then 隐藏课程表界面
-
-- 测试9：处理选课时间冲突
-
-  > Given 学生身份登录的student1
-  >
-  > and student1已选一门与“模式识别与机器学习”时间冲突的课“编译程序高级原理”
-  >
-  > and 处于“选修课程”页面
-  >
-  > when 学生选择“模式识别与机器学习”这门课
-  >
-  > then 弹出通知窗口“选课失败！模式识别与机器学习 与 编译程序高级原理 上课时间冲突！”并跳转到已选课程界面
-
-- 测试10：显示已选学分
-
-  > Given 学生身份登录的student1
-  >
-  > and student1共选7门课，16学分
-  >
-  > and 处于“我的课程”页面
-  >
-  > when 学生点击已选课程
-  >
-  > then 在课程列表下方展示学生应选学分数20和已选学分数16
-
-- 测试11：显示已获学分
-
-  > Given 学生身份登录的student1
-  >
-  > and student1共选7门课
-  >
-  > and student1已有4门课已出成绩
-  >
-  > and 有3门课成绩不低于60分，共7学分
-  >
-  > and 处于“我的课程”页面
-  >
-  > when 学生点击所有成绩
-  >
-  > then 只显示已获成绩的4门课，并且在成绩列表下方展示学生应或学分数20，和已获学分数7（已获学分只统计成绩不低于60分的课程）
-
-- 测试12：学位课设置
-
-  > Given 学生身份登录的student1
-  >
-  > and 处于学位课页面
-  >
-  > and student1已选“计算机体系结构”课
-  >
-  > and student1将该课程设为非学位课
-  >
-  > when 学生点击该课程后方的设为学位课按钮
-  >
-  > then 修改该课程的学位课属性为“是”，并展示出来，同时将后面按钮修改为“设为非学位课”
-  >
-  >  
-  >
-  >  
-  >
-  > Given 学生身份登录的student1
-  >
-  > and 处于学位课页面
-  >
-  > and student1已选“计算机体系结构”课
-  >
-  > and student1将该课程设为学位课
-  >
-  > when 学生点击该课程后方的设为非学位课按钮
-  >
-  > then 修改该课程的学位课属性为“否”，并展示出来，同时将后面按钮修改为“设为学位课”

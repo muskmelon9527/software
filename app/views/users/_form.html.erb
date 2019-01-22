@@ -1,4 +1,4 @@
-<%= form_for @user, html: {class: 'form-horizontal', role: 'form'} do |f| %>
+﻿<%= form_for @user, html: {class: 'form-horizontal', role: 'form'} do |f| %>
     <%= render 'shared/error_messages', :object => @user %>
 
     <div class="form-group">
@@ -6,7 +6,7 @@
       <div class="col-sm-9">
         <div class="input-group">
           <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
-          <%= f.text_field :num, class: 'form-control', placeholder: "输入正确学号" %>
+          <%= f.text_field :num, class: 'form-control', placeholder: "输入学号" %>
         </div>
       </div>
     </div>
@@ -16,7 +16,7 @@
       <div class="col-sm-9">
         <div class="input-group">
           <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
-          <%= f.text_field :name, class: 'form-control', placeholder: "输入真实姓名" %>
+          <%= f.text_field :name, class: 'form-control', placeholder: "输入姓名" %>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
       <div class="col-sm-9">
         <div class="input-group">
           <div class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></div>
-          <%= f.email_field :email, class: 'form-control', placeholder: "输入有效的邮箱" %>
+          <%= f.email_field :email, class: 'form-control', placeholder: "输入邮箱" %>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
       <div class="col-sm-9">
         <div class="input-group">
           <div class="input-group-addon"><span class="glyphicon glyphicon-home"></span></div>
-          <%= f.text_field :major, class: 'form-control', placeholder: "输入专业全称" %>
+          <%= f.text_field :major, class: 'form-control', placeholder: "输入专业" %>
         </div>
       </div>
     </div>
